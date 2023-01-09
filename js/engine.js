@@ -17,3 +17,11 @@ $('.owl-carousel').owlCarousel({
         }
     }
 })
+
+function assistir(){
+    let fundo = document.getElementsByClassName("wallpaper");
+    fundo.style.backgroudImage=none;
+    let player = document.getElementById("filme");
+    player.style.opacity = 100;
+    
+}
