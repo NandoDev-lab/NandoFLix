@@ -1,128 +1,628 @@
 <!DOCTYPE html>
+<!-- Define o documento como HTML5 e configura o idioma principal para Português do Brasil -->
 <html lang="pt-br">
 <head>
+    <!-- Codificação de caracteres UTF-8 para suportar acentuação corretamente -->
     <meta charset="UTF-8">
+    <!-- Garante compatibilidade com versões modernas do navegador Edge -->
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <!-- Configura a escala inicial para que o layout seja responsivo em dispositivos móveis -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="/css/style.css">    
-    <script src="https://kit.fontawesome.com/fae44a85a1.js" crossorigin="anonymous"></script>
-    <!--owl css-->
-    <link rel="stylesheet" href="/css/owl.carousel.min.css">
-    <link rel="stylesheet" href="/css/owl.theme.default.min.css">
+    <!-- Descrição da página para mecanismos de busca (SEO) -->
+    <meta name="description" content="NandoFlix - Plataforma de streaming de filmes e séries com busca em banco de dados SQLite">
     
-    <title>NandoFlix</title>
+    <!-- Título exibido na aba do navegador -->
+    <title>NandoFlix | Filmes e Séries</title>
+
+    <!-- Pré-conexão e importação das fontes do Google Fonts (Bebas Neue para títulos e Inter para textos) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Importação do CSS do framework Bootstrap 5 via CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+
+    <!-- Importação da biblioteca de ícones Font Awesome 6 via CDN -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <!-- Folhas de estilo do plugin Owl Carousel (responsável pelos carrosséis de filmes) -->
+    <link rel="stylesheet" href="./css/owl.carousel.min.css">
+    <link rel="stylesheet" href="./css/owl.theme.default.min.css">
+
+    <!-- Folha de estilo personalizada do projeto -->
+    <link rel="stylesheet" href="./css/style.css">
 </head>
 <body>
-  <header class="container-fluid">
-    <nav class="menu">        
-        <div class="logo">
-            <h1>NandoFlix</h1>
-        </div>
-        <div class="options">
-            <a href="#">Filmes</a>
-            <a href="#">Séries</a>
-            <a href="#">Infantil</a>
-            <a href="#">Documentários</a>
-        </div>
-    </div>
-    </nav>
-  </header>
-  <main class="container-fluid">
-    <iframe name="filme" src="https://sinalpublico.com/player3/serverf5hlb.php?vid=ADAONGRO" frameborder=0 height=400 scrolling=no width=640 allowFullScreen> 
 
-    </iframe>
-    <div class="wallpaper">   
-    <div class="titulo">
-        <h1>Adão Negro</h1>
-    </div>
-    <div class="description">
-        <p>Para alguém mesmo a justiça é cruel...
-        Após ser transformado em um feiticeiro maligno e destruidor
-        que buscaria vingança pela escravidão de seu povo, 
-        <br> Teth-Adam é aprisionado em uma tumba. <br>
-        Após ser liberto de uma prisão de 5000 anos, ele defenderá
-        a justiça? O que foi libertado? um herói? vilão?
-        É o que veremos... </p>
-    </div>
-    <div class="rate">
-       <h5>Avaliação</h5>
-            <span class="fa fa-star"></span>
-            <span class="fa fa-star"></span>
-            <span class="fa fa-star"></span>
-            <span class="fa fa-star"></span>
-            <span class="fa fa-star"></span>
-            <div class="idade">+16</div>
-            <div class="comentarios">Comentários</div>
+    <!-- ==================== CABEÇALHO / BARRA DE NAVEGAÇÃO ==================== -->
+    <header id="navbar" class="navbar-wrapper">
+        <nav class="menu container-fluid">
+            <!-- Lado esquerdo da barra: Logotipo e links de navegação -->
+            <div class="menu-left">
+                <a href="#" class="logo" aria-label="NandoFlix Início">
+                    <h1>NANDO<span>FLIX</span></h1>
+                </a>
+                <!-- Links de âncora que levam diretamente para cada seção da página -->
+                <div class="options" id="navOptions">
+                    <a href="#destaque" class="active">Início</a>
+                    <a href="#filmes">Filmes</a>
+                    <a href="#series">Séries</a>
+                    <a href="#vistos">Recentes</a>
+                    <a href="#melhores">Em Alta</a>
+                </div>
+            </div>
 
+            <!-- Lado direito da barra: Seletor de categoria SQLite, campo de pesquisa e botão mobile -->
+            <div class="menu-right">
+                <!-- Dropdown de categorias alimentado dinamicamente pela tabela `categorias` do SQLite -->
+                <div class="category-select-wrapper">
+                    <i class="fa-solid fa-database db-icon" title="Banco de Dados SQLite Ativo"></i>
+                    <select id="categorySelect" aria-label="Filtrar por categoria no SQLite">
+                        <option value="todas">Todas as Categorias</option>
+                    </select>
+                </div>
 
-    </div>
-    <div class="controllers">
-        <button class="button"><i class="fa-solid fa-play"onclick="assistir()"></i> Assistir agora</button>
-        <button class="button"><i class="fa-solid fa-circle-info"></i> Informações</button>
-    </div>
-    </div>
-</div>
-  </main >
-  <section id="carroussel" class="container-fluid">
-    <div class="carroussel">
-        <h1>Filmes</h1>
-        <div class="owl-carousel owl-theme">
-            <div class="item"><img class="img-filmes" src="/img/Adão Negro.jpg" alt="Filme Adão Negro" srcset="" ></div>
-            <div class="item"><img class="img-filmes" src="img/A Mulher Rei.jpg" alt="Filme Adão Negro" srcset="" onclick=""></div>
-            <div class="item"><img class="img-filmes" src="/img/Pinóquio.jpg" alt="Filme Adão Negro" srcset="" onclick=""></div>
-            <div class="item"><img class="img-filmes" src="/img/O Troll da Montanha.jpg" alt="Filme Adão Negro" srcset="" onclick=""></div>
-            <div class="item"><img class="img-filmes" src="/img/Avatar.jpg" alt="Filme Adão Negro" srcset="" onclick=""></div>
-            <div class="item"><img class="img-filmes" src="/img/Wakanda Para Sempre.jpg" alt="Filme Adão Negro" srcset="" onclick=""></div>
-            <div class="item"><img class="img-filmes" src="img/A Mulher Rei.jpg" alt="Filme Adão Negro" srcset="" onclick=""></div>
-        </div>
-    </div>
-    <div class="series">
-        <h1>Séries</h1>
-        <div class="carroussel-viewed">
-            <div class="owl-carousel owl-theme">
-                <div class="item"><img class="img-filmes" src="/img/serie- Wandinha.jpg" alt="Filme Adão Negro" srcset=""></div>
-            <div class="item"><img class="img-filmes" src="img/serie- Willow.jpg" alt="Filme Adão Negro" srcset=""></div>
-            <div class="item"><img class="img-filmes" src="/img/serie- Yelowstone.jpg" alt="Filme Adão Negro" srcset=""></div>
-            <div class="item"><img class="img-filmes" src="/img/serie- Challenge.jpg" alt="Filme Adão Negro" srcset=""></div>
-            <div class="item"><img class="img-filmes" src="/img/serie- Os Escolhidos.jpg" alt="Filme Adão Negro" srcset=""></div>
-  
+                <!-- Caixa de busca que executa consultas SQL em tempo real -->
+                <div class="search-box">
+                    <i class="fa-solid fa-magnifying-glass search-icon"></i>
+                    <input type="text" id="searchInput" placeholder="Buscar título ou gênero..." aria-label="Buscar filmes ou séries">
+                </div>
+
+                <!-- Botão hambúrguer exibido apenas em telas menores (celulares/tablets) -->
+                <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Abrir menu">
+                    <i class="fa-solid fa-bars"></i>
+                </button>
+            </div>
+        </nav>
+    </header>
+
+    <!-- ==================== SEÇÃO PRINCIPAL / BANNER DE DESTAQUE (HERO) ==================== -->
+    <main id="destaque" class="hero-section">
+        <!-- Container com a imagem de fundo do filme em destaque -->
+        <div class="wallpaper" id="heroWallpaper">
+            <!-- Camada de gradiente escuro (vignette) para garantir legibilidade do texto sobre a imagem -->
+            <div class="hero-overlay"></div>
+
+            <!-- Conteúdo textual e botões do filme em destaque -->
+            <div class="hero-content container-fluid">
+                <!-- Selo de destaque (Top 1 e categoria) -->
+                <div class="hero-badge">
+                    <span class="badge-top10">TOP 1</span>
+                    <span class="badge-text" id="heroCategory">Em Destaque Hoje</span>
+                </div>
+
+                <!-- Título principal do filme ou série em destaque -->
+                <div class="titulo">
+                    <h2 id="heroTitle">Adão Negro</h2>
+                </div>
+
+                <!-- Linha de metadados: relevância, ano, classificação indicativa, qualidade e estrelas -->
+                <div class="rate">
+                    <span class="relevance" id="heroRelevance">96% relevante</span>
+                    <span class="year" id="heroYear">2022</span>
+                    <span class="idade age-16" id="heroAge">+16</span>
+                    <span class="quality-badge">4K HDR</span>
+                    <!-- Ícones de estrelas representando a nota da crítica/público -->
+                    <div class="stars" aria-label="Avaliação 4.5 de 5 estrelas">
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star-half-stroke"></i>
+                    </div>
+                </div>
+
+                <!-- Sinopse resumida do título em destaque -->
+                <div class="description">
+                    <p id="heroDescription">
+                        Após ser aprisionado por quase 5.000 anos, Teth-Adam é libertado de sua tumba terrena, pronto para descarregar sua forma única e implacável de justiça no mundo moderno. O que foi libertado: um herói ou um vilão?
+                    </p>
+                </div>
+
+                <!-- Botões de ação: abrir o player de vídeo ou abrir o modal de detalhes -->
+                <div class="controllers">
+                    <button type="button" class="button btn-primary-play" onclick="assistir()">
+                        <i class="fa-solid fa-play"></i> Assistir agora
+                    </button>
+                    <button type="button" class="button btn-secondary-info" onclick="abrirInfo()">
+                        <i class="fa-solid fa-circle-info"></i> Mais informações
+                    </button>
+                </div>
             </div>
         </div>
-    <div class="viewed">
-        <h1>Último Visualizado</h1>
-        <div class="carroussel-viewed">
-            <div class="owl-carousel owl-theme">
-                <div class="item"><img class="img-filmes" src="/img/Adão Negro.jpg" alt="Filme Adão Negro" srcset=""></div>
-            <div class="item"><img class="img-filmes" src="img/A Mulher Rei.jpg" alt="Filme Adão Negro" srcset=""></div>
-            <div class="item"><img class="img-filmes" src="/img/Pinóquio.jpg" alt="Filme Adão Negro" srcset=""></div>
-            <div class="item"><img class="img-filmes" src="/img/O Troll da Montanha.jpg" alt="Filme Adão Negro" srcset=""></div>
-            <div class="item"><img class="img-filmes" src="/img/Avatar.jpg" alt="Filme Adão Negro" srcset=""></div>
-            <div class="item"><img class="img-filmes" src="/img/Wakanda Para Sempre.jpg" alt="Filme Adão Negro" srcset=""></div>
-            <div class="item"><img class="img-filmes" src="img/A Mulher Rei.jpg" alt="Filme Adão Negro" srcset=""></div>
-            
+    </main>
+
+    <!-- ==================== BARRA DE FILTROS DE CATEGORIA (SQLITE) ==================== -->
+    <section class="category-bar-section container-fluid" aria-label="Filtro rápido por categorias">
+        <div class="category-bar-header">
+            <span class="category-bar-label">
+                <i class="fa-solid fa-filter"></i> Explorar por Categoria (SQLite):
+            </span>
+            <!-- Indicador de status do motor SQLite no navegador -->
+            <span id="sqlStatusBadge" class="sql-status-badge">
+                <i class="fa-solid fa-circle-check"></i> SQLite Pronto
+            </span>
         </div>
-    </div>
-    <div class="best">
-        <h1> Melhor Classificação</h1>
-        <div class="carroussel-best">
+        <!-- Lista de botões (pills) gerada dinamicamente via consulta SQL SELECT nas tabelas do banco -->
+        <div id="categoryPills" class="category-pills">
+            <button type="button" class="category-pill active" data-slug="todas" onclick="filtrarPorCategoria('todas')">
+                Todas
+            </button>
+        </div>
+    </section>
+
+    <!-- ==================== SEÇÃO DE RESULTADOS DA BUSCA / FILTRO SQLITE ==================== -->
+    <!-- Começa oculta (classe d-none do Bootstrap) e aparece ao pesquisar ou selecionar uma categoria -->
+    <section id="searchSection" class="catalog-section container-fluid d-none">
+        <div class="section-header">
+            <div>
+                <h3 class="section-title" id="searchResultTitle">Resultados da busca</h3>
+                <!-- Exibe a consulta SQL executada para fins didáticos e de portfólio -->
+                <code id="sqlQueryPreview" class="sql-query-preview"></code>
+            </div>
+            <button type="button" class="btn-clear-search" onclick="limparBusca()">
+                <i class="fa-solid fa-rotate-left"></i> Mostrar todo o catálogo
+            </button>
+        </div>
+        <!-- Grade onde os cards retornados pelo SELECT do SQLite são renderizados -->
+        <div id="searchGrid" class="search-grid"></div>
+    </section>
+
+    <!-- ==================== CATÁLOGO DE CARROSSÉIS ==================== -->
+    <section id="carroussel" class="catalog-section container-fluid">
+
+        <!-- 1. Carrossel de Filmes em Destaque -->
+        <div id="filmes" class="carousel-block">
+            <div class="section-header">
+                <h3 class="section-title">Filmes em Destaque</h3>
+                <span class="section-subtitle">Clique em um título para ver detalhes</span>
+            </div>
+            <!-- Container do Owl Carousel -->
             <div class="owl-carousel owl-theme">
-                <div class="item"><img class="img-filmes" src="/img/Pinóquio.jpg" alt="Filme Adão Negro" srcset=""></div>
-                <div class="item"><img class="img-filmes" src="/img/Wakanda Para Sempre.jpg" alt="Filme Adão Negro" srcset=""></div>
-                <div class="item"><img class="img-filmes" src="/img/Adão Negro.jpg" alt="Filme Adão Negro" srcset=""></div>
-                <div class="item"><img class="img-filmes" src="img/A Mulher Rei.jpg" alt="Filme Adão Negro" srcset=""></div>
-                <div class="item"><img class="img-filmes" src="/img/Pinóquio.jpg" alt="Filme Adão Negro" srcset=""></div>            
-                <div class="item"><img class="img-filmes" src="/img/Avatar.jpg" alt="Filme Adão Negro" srcset=""></div>
-                <div class="item"><img class="img-filmes" src="img/A Mulher Rei.jpg" alt="Filme Adão Negro" srcset=""></div>
-            
+                <!-- Card individual de filme: ao clicar, chama selecionarMidia() passando o ID do filme -->
+                <div class="item">
+                    <div class="movie-card" onclick="selecionarMidia('adao-negro')">
+                        <img class="img-filmes" src="./img/Adão Negro.jpg" alt="Pôster do filme Adão Negro" loading="lazy">
+                        <!-- Camada exibida ao passar o mouse (hover) sobre o card -->
+                        <div class="card-overlay">
+                            <h4>Adão Negro</h4>
+                            <div class="card-meta">
+                                <span class="match">96%</span>
+                                <span class="age-badge">+16</span>
+                                <span>Ação</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="item">
+                    <div class="movie-card" onclick="selecionarMidia('mulher-rei')">
+                        <img class="img-filmes" src="./img/A Mulher Rei.jpg" alt="Pôster do filme A Mulher Rei" loading="lazy">
+                        <div class="card-overlay">
+                            <h4>A Mulher Rei</h4>
+                            <div class="card-meta">
+                                <span class="match">98%</span>
+                                <span class="age-badge">+16</span>
+                                <span>Épico</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="item">
+                    <div class="movie-card" onclick="selecionarMidia('wakanda')">
+                        <img class="img-filmes" src="./img/Wakanda Para Sempre.jpg" alt="Pôster do filme Pantera Negra: Wakanda Para Sempre" loading="lazy">
+                        <div class="card-overlay">
+                            <h4>Wakanda Para Sempre</h4>
+                            <div class="card-meta">
+                                <span class="match">95%</span>
+                                <span class="age-badge">+14</span>
+                                <span>Heróis</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="item">
+                    <div class="movie-card" onclick="selecionarMidia('avatar')">
+                        <img class="img-filmes" src="./img/Avatar.jpg" alt="Pôster do filme Avatar: O Caminho da Água" loading="lazy">
+                        <div class="card-overlay">
+                            <h4>Avatar</h4>
+                            <div class="card-meta">
+                                <span class="match">97%</span>
+                                <span class="age-badge">+14</span>
+                                <span>Ficção</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="item">
+                    <div class="movie-card" onclick="selecionarMidia('pinoquio')">
+                        <img class="img-filmes" src="./img/Pinóquio.jpg" alt="Pôster do filme Pinóquio por Guillermo del Toro" loading="lazy">
+                        <div class="card-overlay">
+                            <h4>Pinóquio</h4>
+                            <div class="card-meta">
+                                <span class="match">94%</span>
+                                <span class="age-badge">+10</span>
+                                <span>Animação</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="item">
+                    <div class="movie-card" onclick="selecionarMidia('troll')">
+                        <img class="img-filmes" src="./img/O Troll da Montanha.jpg" alt="Pôster do filme O Troll da Montanha" loading="lazy">
+                        <div class="card-overlay">
+                            <h4>O Troll da Montanha</h4>
+                            <div class="card-meta">
+                                <span class="match">89%</span>
+                                <span class="age-badge">+12</span>
+                                <span>Aventura</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="item">
+                    <div class="movie-card" onclick="selecionarMidia('hex')">
+                        <img class="img-filmes" src="./img/Hex.jpg" alt="Pôster do filme Hex: Paraquedistas Amaldiçoados" loading="lazy">
+                        <div class="card-overlay">
+                            <h4>Hex</h4>
+                            <div class="card-meta">
+                                <span class="match">84%</span>
+                                <span class="age-badge">+16</span>
+                                <span>Suspense</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
-  </section>
- 
-  <script src="/js/jquery.min.js"></script>
-  <script src="/js/owl.carousel.min.js"></script> 
-  <script src="/js/engine.js"></script>
 
+        <!-- 2. Carrossel de Séries -->
+        <div id="series" class="carousel-block">
+            <div class="section-header">
+                <h3 class="section-title">Séries Originais e Aclamadas</h3>
+            </div>
+            <div class="owl-carousel owl-theme">
+                <div class="item">
+                    <div class="movie-card" onclick="selecionarMidia('wandinha')">
+                        <img class="img-filmes" src="./img/serie- Wandinha.jpg" alt="Pôster da série Wandinha" loading="lazy">
+                        <div class="card-overlay">
+                            <h4>Wandinha</h4>
+                            <div class="card-meta">
+                                <span class="match">99%</span>
+                                <span class="age-badge">+14</span>
+                                <span>Mistério</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="item">
+                    <div class="movie-card" onclick="selecionarMidia('willow')">
+                        <img class="img-filmes" src="./img/serie- Willow.jpg" alt="Pôster da série Willow" loading="lazy">
+                        <div class="card-overlay">
+                            <h4>Willow</h4>
+                            <div class="card-meta">
+                                <span class="match">90%</span>
+                                <span class="age-badge">+12</span>
+                                <span>Fantasia</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="item">
+                    <div class="movie-card" onclick="selecionarMidia('yellowstone')">
+                        <img class="img-filmes" src="./img/serie- Yelowstone.jpg" alt="Pôster da série Yellowstone" loading="lazy">
+                        <div class="card-overlay">
+                            <h4>Yellowstone</h4>
+                            <div class="card-meta">
+                                <span class="match">96%</span>
+                                <span class="age-badge">+16</span>
+                                <span>Drama</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="item">
+                    <div class="movie-card" onclick="selecionarMidia('challenge')">
+                        <img class="img-filmes" src="./img/serie- Challenge.jpg" alt="Pôster da série The Challenge" loading="lazy">
+                        <div class="card-overlay">
+                            <h4>The Challenge</h4>
+                            <div class="card-meta">
+                                <span class="match">88%</span>
+                                <span class="age-badge">+14</span>
+                                <span>Reality</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="item">
+                    <div class="movie-card" onclick="selecionarMidia('escolhidos')">
+                        <img class="img-filmes" src="./img/serie- Os Escolhidos.jpg" alt="Pôster da série Os Escolhidos (The Chosen)" loading="lazy">
+                        <div class="card-overlay">
+                            <h4>Os Escolhidos</h4>
+                            <div class="card-meta">
+                                <span class="match">98%</span>
+                                <span class="age-badge">+12</span>
+                                <span>Histórico</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 3. Carrossel de Continuar Assistindo (Últimos Visualizados) -->
+        <div id="vistos" class="carousel-block">
+            <div class="section-header">
+                <h3 class="section-title">Continuar Assistindo</h3>
+            </div>
+            <div class="owl-carousel owl-theme">
+                <div class="item">
+                    <div class="movie-card" onclick="selecionarMidia('adao-negro')">
+                        <img class="img-filmes" src="./img/Adão Negro.jpg" alt="Pôster do filme Adão Negro" loading="lazy">
+                        <div class="card-overlay">
+                            <h4>Adão Negro</h4>
+                            <div class="card-meta">
+                                <span class="match">96%</span>
+                                <span class="age-badge">+16</span>
+                                <span>Ação</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="item">
+                    <div class="movie-card" onclick="selecionarMidia('wandinha')">
+                        <img class="img-filmes" src="./img/serie- Wandinha.jpg" alt="Pôster da série Wandinha" loading="lazy">
+                        <div class="card-overlay">
+                            <h4>Wandinha</h4>
+                            <div class="card-meta">
+                                <span class="match">99%</span>
+                                <span class="age-badge">+14</span>
+                                <span>Mistério</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="item">
+                    <div class="movie-card" onclick="selecionarMidia('avatar')">
+                        <img class="img-filmes" src="./img/Avatar.jpg" alt="Pôster do filme Avatar" loading="lazy">
+                        <div class="card-overlay">
+                            <h4>Avatar</h4>
+                            <div class="card-meta">
+                                <span class="match">97%</span>
+                                <span class="age-badge">+14</span>
+                                <span>Ficção</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="item">
+                    <div class="movie-card" onclick="selecionarMidia('mulher-rei')">
+                        <img class="img-filmes" src="./img/A Mulher Rei.jpg" alt="Pôster do filme A Mulher Rei" loading="lazy">
+                        <div class="card-overlay">
+                            <h4>A Mulher Rei</h4>
+                            <div class="card-meta">
+                                <span class="match">98%</span>
+                                <span class="age-badge">+16</span>
+                                <span>Épico</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="item">
+                    <div class="movie-card" onclick="selecionarMidia('pinoquio')">
+                        <img class="img-filmes" src="./img/Pinóquio.jpg" alt="Pôster do filme Pinóquio" loading="lazy">
+                        <div class="card-overlay">
+                            <h4>Pinóquio</h4>
+                            <div class="card-meta">
+                                <span class="match">94%</span>
+                                <span class="age-badge">+10</span>
+                                <span>Animação</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="item">
+                    <div class="movie-card" onclick="selecionarMidia('troll')">
+                        <img class="img-filmes" src="./img/O Troll da Montanha.jpg" alt="Pôster do filme O Troll da Montanha" loading="lazy">
+                        <div class="card-overlay">
+                            <h4>O Troll da Montanha</h4>
+                            <div class="card-meta">
+                                <span class="match">89%</span>
+                                <span class="age-badge">+12</span>
+                                <span>Aventura</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 4. Carrossel de Mais Bem Avaliados -->
+        <div id="melhores" class="carousel-block">
+            <div class="section-header">
+                <h3 class="section-title">Mais Bem Avaliados</h3>
+            </div>
+            <div class="owl-carousel owl-theme">
+                <div class="item">
+                    <div class="movie-card" onclick="selecionarMidia('wandinha')">
+                        <img class="img-filmes" src="./img/serie- Wandinha.jpg" alt="Pôster da série Wandinha" loading="lazy">
+                        <div class="card-overlay">
+                            <h4>Wandinha</h4>
+                            <div class="card-meta">
+                                <span class="match">99%</span>
+                                <span class="age-badge">+14</span>
+                                <span>Mistério</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="item">
+                    <div class="movie-card" onclick="selecionarMidia('mulher-rei')">
+                        <img class="img-filmes" src="./img/A Mulher Rei.jpg" alt="Pôster do filme A Mulher Rei" loading="lazy">
+                        <div class="card-overlay">
+                            <h4>A Mulher Rei</h4>
+                            <div class="card-meta">
+                                <span class="match">98%</span>
+                                <span class="age-badge">+16</span>
+                                <span>Épico</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="item">
+                    <div class="movie-card" onclick="selecionarMidia('escolhidos')">
+                        <img class="img-filmes" src="./img/serie- Os Escolhidos.jpg" alt="Pôster da série Os Escolhidos" loading="lazy">
+                        <div class="card-overlay">
+                            <h4>Os Escolhidos</h4>
+                            <div class="card-meta">
+                                <span class="match">98%</span>
+                                <span class="age-badge">+12</span>
+                                <span>Histórico</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="item">
+                    <div class="movie-card" onclick="selecionarMidia('avatar')">
+                        <img class="img-filmes" src="./img/Avatar.jpg" alt="Pôster do filme Avatar" loading="lazy">
+                        <div class="card-overlay">
+                            <h4>Avatar</h4>
+                            <div class="card-meta">
+                                <span class="match">97%</span>
+                                <span class="age-badge">+14</span>
+                                <span>Ficção</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="item">
+                    <div class="movie-card" onclick="selecionarMidia('wakanda')">
+                        <img class="img-filmes" src="./img/Wakanda Para Sempre.jpg" alt="Pôster do filme Wakanda Para Sempre" loading="lazy">
+                        <div class="card-overlay">
+                            <h4>Wakanda Para Sempre</h4>
+                            <div class="card-meta">
+                                <span class="match">95%</span>
+                                <span class="age-badge">+14</span>
+                                <span>Heróis</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="item">
+                    <div class="movie-card" onclick="selecionarMidia('pinoquio')">
+                        <img class="img-filmes" src="./img/Pinóquio.jpg" alt="Pôster do filme Pinóquio" loading="lazy">
+                        <div class="card-overlay">
+                            <h4>Pinóquio</h4>
+                            <div class="card-meta">
+                                <span class="match">94%</span>
+                                <span class="age-badge">+10</span>
+                                <span>Animação</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="item">
+                    <div class="movie-card" onclick="selecionarMidia('adao-negro')">
+                        <img class="img-filmes" src="./img/Adão Negro.jpg" alt="Pôster do filme Adão Negro" loading="lazy">
+                        <div class="card-overlay">
+                            <h4>Adão Negro</h4>
+                            <div class="card-meta">
+                                <span class="match">96%</span>
+                                <span class="age-badge">+16</span>
+                                <span>Ação</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </section>
+
+    <!-- ==================== MODAL DO PLAYER DE VÍDEO ==================== -->
+    <div id="playerModal" class="custom-modal" aria-hidden="true">
+        <!-- Fundo escuro clicável que fecha o player ao clicar fora da caixa -->
+        <div class="custom-modal-backdrop" onclick="fecharPlayer()"></div>
+        <div class="custom-modal-content player-box">
+            <!-- Cabeçalho do modal com o título do vídeo e botão de fechar -->
+            <div class="custom-modal-header">
+                <h4 id="playerModalTitle">Reproduzindo: Adão Negro</h4>
+                <button type="button" class="btn-close-modal" onclick="fecharPlayer()" aria-label="Fechar player">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            <!-- Container responsivo 16:9 para o iframe do vídeo/trailer -->
+            <div class="video-container">
+                <iframe id="filme" name="filme" src="" title="Player de Vídeo NandoFlix" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== MODAL DE MAIS INFORMAÇÕES ==================== -->
+    <div id="infoModal" class="custom-modal" aria-hidden="true">
+        <!-- Fundo escuro clicável para fechar o modal -->
+        <div class="custom-modal-backdrop" onclick="fecharInfo()"></div>
+        <div class="custom-modal-content info-box">
+            <!-- Botão flutuante no canto superior direito para fechar -->
+            <button type="button" class="btn-close-modal floating-close" onclick="fecharInfo()" aria-label="Fechar informações">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+            <!-- Corpo do modal com pôster à esquerda e detalhes à direita -->
+            <div class="info-body">
+                <img id="infoPoster" src="./img/Adão Negro.jpg" alt="Pôster" class="info-poster">
+                <div class="info-details">
+                    <span class="info-tag" id="infoCategory">Filme • Ação e Fantasia</span>
+                    <h3 id="infoTitle">Adão Negro</h3>
+                    <div class="info-meta">
+                        <span class="relevance" id="infoRelevance">96% relevante</span>
+                        <span id="infoYear">2022</span>
+                        <span class="idade" id="infoAge">+16</span>
+                        <span class="quality-badge">4K HDR</span>
+                    </div>
+                    <!-- Tags de categorias retornadas diretamente do relacionamento N:N no SQLite -->
+                    <div id="infoCategoryBadges" class="info-category-badges"></div>
+                    <p id="infoDescription">
+                        Após ser aprisionado por quase 5.000 anos, Teth-Adam é libertado de sua tumba terrena, pronto para descarregar sua forma única e implacável de justiça no mundo moderno.
+                    </p>
+                    <!-- Botão dentro do modal que fecha os detalhes e inicia o vídeo imediatamente -->
+                    <div class="info-actions">
+                        <button type="button" class="button btn-primary-play" onclick="fecharInfo(); assistir();">
+                            <i class="fa-solid fa-play"></i> Assistir Trailer / Filme
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== RODAPÉ ==================== -->
+    <footer class="footer container-fluid">
+        <div class="footer-content">
+            <div class="footer-brand">
+                <h2>NANDO<span>FLIX</span></h2>
+                <p>Interface de streaming desenvolvida para portfólio com HTML5, CSS3, JavaScript, SQLite (sql.js), jQuery e Bootstrap 5.</p>
+            </div>
+            <div class="footer-links">
+                <a href="#destaque">Início</a>
+                <a href="#filmes">Filmes</a>
+                <a href="#series">Séries</a>
+                <a href="#melhores">Em Alta</a>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 NandoFlix. Todos os direitos reservados.</p>
+        </div>
+    </footer>
+
+    <!-- ==================== IMPORTAÇÃO DE SCRIPTS JAVASCRIPT ==================== -->
+    <!-- jQuery (necessário para o funcionamento do Owl Carousel) -->
+    <script src="./js/jquery.min.js"></script>
+    <!-- Script do plugin Owl Carousel -->
+    <script src="./js/owl.carousel.min.js"></script>
+    <!-- Bundle JavaScript do Bootstrap 5 -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+    <!-- Biblioteca SQL.js (Motor oficial do SQLite compilado para WebAssembly no navegador) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.10.3/sql-wasm.js" crossorigin="anonymous"></script>
+    <!-- Script principal com banco de dados SQLite, consultas SQL e interatividade do NandoFlix -->
+    <script src="./js/engine.js"></script>
 </body>
 </html>

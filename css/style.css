@@ -1,113 +1,1006 @@
-*{
+/* ==========================================================================
+   VARIÁVEIS GLOBAIS (CSS CUSTOM PROPERTIES)
+   Centraliza a paleta de cores e transições para facilitar a manutenção
+   ========================================================================== */
+:root {
+    --bg-dark: #0a0a0e;                /* Cor de fundo principal da página (preto azulado profundo) */
+    --bg-elevated: #14141c;            /* Cor de fundo para modais e superfícies elevadas */
+    --bg-card: #1a1a24;                /* Cor de fundo padrão dos cards enquanto a imagem carrega */
+    --primary-red: #e50914;            /* Vermelho principal inspirado na identidade da Netflix */
+    --primary-red-hover: #f6121d;      /* Tom de vermelho mais vivo ao passar o mouse */
+    --text-primary: #f8f9fa;           /* Branco suave para títulos e textos principais */
+    --text-secondary: #b3b3b3;         /* Cinza claro para textos de apoio e descrições */
+    --text-muted: #757575;             /* Cinza escuro para legendas e placeholders */
+    --accent-gold: #f5c518;            /* Dourado para as estrelas de avaliação (estilo IMDb) */
+    --accent-green: #46d369;           /* Verde para a porcentagem de relevância */
+    --border-subtle: rgba(255, 255, 255, 0.1); /* Borda translúcida sutil */
+    --transition-smooth: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1); /* Curva de transição suave */
+}
+
+/* ==========================================================================
+   RESET E CONFIGURAÇÕES GERAIS DA PÁGINA
+   ========================================================================== */
+* {
     padding: 0;
     margin: 0;
-    box-sizing: border-box;
+    box-sizing: border-box; /* Faz com que padding e border não aumentem o tamanho final dos elementos */
 }
-body{
-    background-color: rgb(8, 5, 5);
-    color: rgb(249, 250, 252);
-    
+
+html {
+    scroll-behavior: smooth; /* Ativa rolagem suave ao clicar nos links de âncora do menu */
 }
-/*Nav*/
-.menu{
+
+body {
+    background-color: var(--bg-dark);
+    color: var(--text-primary);
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    overflow-x: hidden; /* Evita barra de rolagem horizontal indesejada */
+    line-height: 1.5;
+}
+
+/* ==========================================================================
+   CABEÇALHO E BARRA DE NAVEGAÇÃO (NAVBAR)
+   ========================================================================== */
+.navbar-wrapper {
+    position: fixed; /* Mantém a barra sempre visível no topo da tela */
+    top: 0;
+    left: 0;
     width: 100%;
+    z-index: 1000; /* Garante que a navbar fique acima dos banners e cards */
+    /* Gradiente escuro no topo que desaparece em direção ao banner */
+    background: linear-gradient(180deg, rgba(10, 10, 14, 0.9) 0%, rgba(10, 10, 14, 0) 100%);
+    transition: var(--transition-smooth);
+}
+
+/* Classe adicionada via JavaScript quando o usuário rola a página para baixo */
+.navbar-wrapper.scrolled {
+    background: rgba(10, 10, 14, 0.92);
+    backdrop-filter: blur(12px); /* Efeito de vidro fosco (Glassmorphism) */
+    -webkit-backdrop-filter: blur(12px);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.6);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.menu {
     display: flex;
     align-items: center;
+    justify-content: space-between;
+    padding: 16px 4%;
+    max-width: 1600px;
 }
-.menu a{    
-    text-decoration: none;    
-   
-    color: rgb(116, 113, 113);
-    padding: 10px;
-    margin-left: 5px;
-}
-.menu a:hover{
-    color: white;
-}
-.logo h1{
-    font-family: Arial, Helvetica, sans-serif;
-    font-weight: bolder;
-    color: rgb(243, 28, 28);
-    padding: 5px 5px 5px 0px;
-}
-.options{
-    width: 100%;
+
+.menu-left {
     display: flex;
-    justify-content: flex-end;    
+    align-items: center;
+    gap: 36px; /* Espaçamento entre o logo e a lista de links */
 }
-/*main*/
-iframe{
-    width: 100%;
-    height: 58%;
-    opacity: 20%;  
+
+.logo {
+    text-decoration: none;
+}
+
+.logo h1 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2.3rem;
+    letter-spacing: 2px;
+    color: var(--primary-red);
+    margin: 0;
+    line-height: 1;
+    text-shadow: 0 2px 10px rgba(229, 9, 20, 0.35);
+}
+
+/* Deixa a palavra "FLIX" em branco para criar contraste no logotipo */
+.logo h1 span {
+    color: var(--text-primary);
+}
+
+.options {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.options a {
+    text-decoration: none;
+    color: var(--text-secondary);
+    font-size: 0.92rem;
+    font-weight: 500;
+    transition: var(--transition-smooth);
+    position: relative;
+    padding: 4px 0;
+}
+
+.options a:hover,
+.options a.active {
+    color: var(--text-primary);
+}
+
+/* Linha vermelha indicadora embaixo do link ativo */
+.options a.active::after {
+    content: '';
     position: absolute;
-    border: 2px solid yellow;
-
-   
-}
-.wallpaper{
+    bottom: -2px;
+    left: 0;
     width: 100%;
-    height: 500px;
-    background-image: linear-gradient(rgba(0,0,0,0.30),rgba(0,0,0,0.30)100%), url(/img/bkgAdãoNegro.jpg);
-    background-size:100%;
-    margin-top: 5px;
-    margin-bottom: 15px;
-    padding: 15px;
+    height: 2px;
+    background-color: var(--primary-red);
+    border-radius: 2px;
 }
-.titulo h4{
-    font-family: Georgia, 'Times New Roman', Times, serif;
-  
 
-}
-.description{
-    width: 30%;
-    height: 250px;
-    display:flexbox;
-}
-.rate{
+.menu-right {
     display: flex;
     align-items: center;
-    
-}
-.idade{
-    font-size: 20px;
-    padding: 2px 15px 2px 15px;
-    background-color: rgba(49, 48, 48, 0.685);
-    border-radius: 15px;
-    margin-left: 10px;
-    margin-bottom: 10px;
+    gap: 12px;
 }
 
-.comentarios{
-    color: white;
-    font-weight: bold;
-    margin-left: 5px;
+/* Seletor Dropdown de Categorias (alimentado pelo SQLite) */
+.category-select-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
 }
-.button{
-    margin-right: 10px;
-    padding: 10px 30px 10px 30px;
-    background-color: rgba(49, 48, 48, 0.685);
-    color: aliceblue;
+
+.db-icon {
+    position: absolute;
+    left: 12px;
+    color: var(--primary-red);
+    font-size: 0.8rem;
+    pointer-events: none;
+}
+
+.category-select-wrapper select {
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 20px;
+    padding: 7px 28px 7px 32px;
+    color: var(--text-primary);
+    font-size: 0.84rem;
+    cursor: pointer;
+    outline: none;
+    transition: var(--transition-smooth);
+    appearance: none;
+    -webkit-appearance: none;
+}
+
+.category-select-wrapper select:hover,
+.category-select-wrapper select:focus {
+    background: rgba(20, 20, 28, 0.95);
+    border-color: var(--primary-red);
+}
+
+.category-select-wrapper select option {
+    background-color: var(--bg-elevated);
+    color: var(--text-primary);
+}
+
+/* Estilização da caixa de busca */
+.search-box {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.search-icon {
+    position: absolute;
+    left: 12px;
+    color: var(--text-secondary);
+    font-size: 0.85rem;
+    pointer-events: none; /* Permite clicar no input através do ícone */
+}
+
+.search-box input {
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 20px;
+    padding: 7px 14px 7px 34px; /* Espaço à esquerda para não sobrepor a lupa */
+    color: var(--text-primary);
+    font-size: 0.85rem;
+    width: 200px;
+    transition: var(--transition-smooth);
+    outline: none;
+}
+
+.search-box input::placeholder {
+    color: var(--text-muted);
+}
+
+/* Expande a barra de busca suavemente quando o usuário clica nela */
+.search-box input:focus {
+    width: 245px;
+    background: rgba(20, 20, 28, 0.95);
+    border-color: var(--primary-red);
+    box-shadow: 0 0 0 3px rgba(229, 9, 20, 0.18);
+}
+
+/* Botão do menu mobile (oculto em telas grandes) */
+.mobile-menu-btn {
+    display: none;
+    background: transparent;
     border: none;
+    color: var(--text-primary);
+    font-size: 1.4rem;
+    cursor: pointer;
+}
+
+/* ==========================================================================
+   BANNER PRINCIPAL (HERO SECTION)
+   ========================================================================== */
+.hero-section {
+    position: relative;
+    width: 100%;
+}
+
+.wallpaper {
+    position: relative;
+    width: 100%;
+    min-height: 82vh; /* Ocupa 82% da altura da janela do navegador */
+    background-image: url('../img/bkgAdãoNegro.jpg');
+    background-size: cover; /* Garante que a imagem cubra toda a área sem distorcer */
+    background-position: center top;
+    background-repeat: no-repeat;
+    display: flex;
+    align-items: center;
+    padding: 110px 4% 60px;
+    transition: background-image 0.5s ease-in-out;
+}
+
+/* Camada dupla de gradiente (horizontal e vertical) para fundir a imagem ao fundo escuro */
+.hero-overlay {
+    position: absolute;
+    inset: 0;
+    background:
+        linear-gradient(90deg, rgba(10, 10, 14, 0.95) 0%, rgba(10, 10, 14, 0.78) 42%, rgba(10, 10, 14, 0.2) 100%),
+        linear-gradient(180deg, rgba(10, 10, 14, 0.3) 0%, rgba(10, 10, 14, 0) 50%, var(--bg-dark) 100%);
+    z-index: 1;
+}
+
+/* Conteúdo posicionado acima da camada de gradiente (z-index: 2) */
+.hero-content {
+    position: relative;
+    z-index: 2;
+    max-width: 640px;
+    margin: 0;
+    padding: 0;
+}
+
+.hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 12px;
+}
+
+.badge-top10 {
+    background-color: var(--primary-red);
+    color: #fff;
+    font-weight: 800;
+    font-size: 0.72rem;
+    padding: 3px 8px;
+    border-radius: 4px;
+    letter-spacing: 0.8px;
+}
+
+.badge-text {
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: #e0e0e0;
+}
+
+.titulo h2 {
+    font-family: 'Bebas Neue', sans-serif;
+    /* clamp() adapta o tamanho da fonte automaticamente entre telas pequenas e grandes */
+    font-size: clamp(2.8rem, 6vw, 4.8rem);
+    letter-spacing: 1.5px;
+    line-height: 1;
+    margin-bottom: 14px;
+    color: #ffffff;
+    text-shadow: 0 4px 20px rgba(0, 0, 0, 0.7);
+}
+
+/* Linha de metadados e estrelas */
+.rate {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 18px;
+    font-size: 0.9rem;
+}
+
+.relevance {
+    color: var(--accent-green);
+    font-weight: 700;
+}
+
+.year {
+    color: var(--text-secondary);
+    font-weight: 500;
+}
+
+.idade {
+    font-size: 0.78rem;
+    font-weight: 700;
+    padding: 2px 8px;
+    background-color: #d9534f;
+    color: #fff;
+    border-radius: 4px;
+}
+
+.quality-badge {
+    font-size: 0.72rem;
+    font-weight: 600;
+    padding: 1px 6px;
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    border-radius: 3px;
+    color: var(--text-primary);
+}
+
+.stars {
+    display: inline-flex;
+    align-items: center;
+    gap: 3px;
+    color: var(--accent-gold);
+    font-size: 0.88rem;
+}
+
+.description {
+    max-width: 560px;
+    margin-bottom: 28px;
+}
+
+.description p {
+    color: #d6d6dc;
+    font-size: 1rem;
+    line-height: 1.65;
+    margin: 0;
+    text-shadow: 0 1px 4px rgba(0, 0, 0, 0.8);
+}
+
+/* Botões de controle do Banner */
+.controllers {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px;
+}
+
+.button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 12px 28px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    border-radius: 6px;
+    border: none;
+    cursor: pointer;
+    transition: var(--transition-smooth);
+}
+
+/* Botão principal (Assistir agora) */
+.btn-primary-play {
+    background-color: var(--primary-red);
+    color: #ffffff;
+    box-shadow: 0 4px 15px rgba(229, 9, 20, 0.4);
+}
+
+.btn-primary-play:hover {
+    background-color: var(--primary-red-hover);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 22px rgba(229, 9, 20, 0.55);
+}
+
+/* Botão secundário translúcido (Mais informações) */
+.btn-secondary-info {
+    background-color: rgba(255, 255, 255, 0.16);
+    color: #ffffff;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.btn-secondary-info:hover {
+    background-color: rgba(255, 255, 255, 0.28);
+    transform: translateY(-2px);
+}
+
+/* ==========================================================================
+   BARRA DE FILTROS DE CATEGORIA (SQLITE)
+   ========================================================================== */
+.category-bar-section {
+    padding: 10px 4% 20px;
+    max-width: 1600px;
+    position: relative;
+    z-index: 5;
+}
+
+.category-bar-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 12px;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.category-bar-label {
+    font-size: 0.88rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.category-bar-label i {
+    color: var(--primary-red);
+}
+
+/* Selo que confirma que o motor SQLite está ativo no navegador */
+.sql-status-badge {
+    font-size: 0.75rem;
+    font-weight: 600;
+    padding: 4px 10px;
+    border-radius: 12px;
+    background: rgba(70, 211, 105, 0.12);
+    color: var(--accent-green);
+    border: 1px solid rgba(70, 211, 105, 0.3);
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+/* Lista horizontal de botões de categoria (Pills) */
+.category-pills {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    overflow-x: auto;
+    padding-bottom: 6px;
+    scrollbar-width: thin;
+}
+
+.category-pill {
+    background: rgba(255, 255, 255, 0.07);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    color: var(--text-secondary);
+    padding: 7px 16px;
+    border-radius: 20px;
+    font-size: 0.84rem;
+    font-weight: 500;
+    white-space: nowrap;
+    cursor: pointer;
+    transition: var(--transition-smooth);
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.category-pill .pill-count {
+    background: rgba(255, 255, 255, 0.14);
+    color: var(--text-primary);
+    font-size: 0.72rem;
+    padding: 1px 6px;
     border-radius: 10px;
-
-}
-button:hover{
-   color: black;   
-   background-color: rgb(250, 249, 249);
-   transition: 0.3s;
 }
 
+.category-pill:hover {
+    background: rgba(255, 255, 255, 0.15);
+    color: var(--text-primary);
+    transform: translateY(-1px);
+}
 
-.fa-star{
-   color: black;
-   background-color: rgba(88, 85, 82, 0.479);
+.category-pill.active {
+    background: var(--primary-red);
+    border-color: var(--primary-red);
+    color: #fff;
+    box-shadow: 0 4px 12px rgba(229, 9, 20, 0.35);
 }
-.checked {
-    color: orange;
+
+.category-pill.active .pill-count {
+    background: rgba(0, 0, 0, 0.25);
+    color: #fff;
 }
-.img-filmes{
+
+/* Bloco que exibe a consulta SQL executada em tempo real */
+.sql-query-preview {
+    display: inline-block;
+    margin-top: 6px;
+    padding: 4px 10px;
+    background: rgba(255, 255, 255, 0.06);
+    border-left: 3px solid var(--primary-red);
+    border-radius: 4px;
+    color: #9cdcfe;
+    font-size: 0.78rem;
+}
+
+/* ==========================================================================
+   SEÇÕES DO CATÁLOGO E CARROSSÉIS DE FILMES
+   ========================================================================== */
+.catalog-section {
+    padding: 10px 4% 40px;
+    max-width: 1600px;
+    position: relative;
+    z-index: 5;
+}
+
+.carousel-block {
+    margin-bottom: 42px;
+}
+
+.section-header {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    margin-bottom: 14px;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.section-title {
+    font-size: 1.35rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+/* Barra vertical vermelha ao lado do título de cada seção */
+.section-title::before {
+    content: '';
+    display: inline-block;
+    width: 4px;
+    height: 20px;
+    background-color: var(--primary-red);
+    border-radius: 2px;
+}
+
+.section-subtitle {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+}
+
+/* Espaçamento extra no carrossel para não cortar a sombra do card no hover */
+.owl-carousel .owl-stage-outer {
+    padding: 10px 2px;
+}
+
+/* Card de cada filme/série */
+.movie-card {
+    position: relative;
+    border-radius: 8px;
+    overflow: hidden;
+    background-color: var(--bg-card);
+    aspect-ratio: 2 / 3; /* Mantém proporção padrão de pôster de cinema (2:3) */
+    cursor: pointer;
+    transition: var(--transition-smooth);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.45);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.img-filmes {
     width: 100%;
     height: 100%;
+    object-fit: cover; /* Preenche todo o card sem achatar ou esticar a imagem */
     display: block;
+    transition: transform 0.4s ease;
+}
+
+/* Camada escura com informações que surge ao passar o mouse sobre o card */
+.card-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(0, 0, 0, 0) 35%, rgba(10, 10, 14, 0.96) 100%);
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 14px;
+    opacity: 0;
+    transition: var(--transition-smooth);
+}
+
+.card-overlay h4 {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 6px;
+}
+
+.card-meta {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+}
+
+.card-meta .match {
+    color: var(--accent-green);
+    font-weight: 700;
+}
+
+.card-meta .age-badge {
+    background: rgba(255, 255, 255, 0.18);
+    color: #fff;
+    padding: 1px 5px;
+    border-radius: 3px;
+    font-weight: 600;
+}
+
+/* Efeitos de elevação e zoom quando o usuário passa o mouse no card */
+.movie-card:hover {
+    transform: translateY(-6px) scale(1.03);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.75);
+    border-color: rgba(229, 9, 20, 0.5);
+}
+
+.movie-card:hover .img-filmes {
+    transform: scale(1.08);
+}
+
+.movie-card:hover .card-overlay {
+    opacity: 1;
+}
+
+/* Personalização dos indicadores de página (bolinhas) do Owl Carousel */
+.owl-theme .owl-dots .owl-dot span {
+    background: rgba(255, 255, 255, 0.25);
+    width: 8px;
+    height: 8px;
+    margin: 5px 4px;
+    transition: var(--transition-smooth);
+}
+
+.owl-theme .owl-dots .owl-dot.active span,
+.owl-theme .owl-dots .owl-dot:hover span {
+    background: var(--primary-red);
+    width: 22px; /* Transforma a bolinha ativa em uma pílula alongada */
+}
+
+/* ==========================================================================
+   GRADE DE RESULTADOS DA BUSCA
+   ========================================================================== */
+.search-grid {
+    display: grid;
+    /* Cria colunas responsivas automaticamente de no mínimo 170px */
+    grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+    gap: 18px;
+    margin-top: 16px;
+    margin-bottom: 32px;
+}
+
+.btn-clear-search {
+    background: rgba(255, 255, 255, 0.1);
+    color: var(--text-primary);
+    border: 1px solid var(--border-subtle);
+    padding: 6px 16px;
+    border-radius: 16px;
+    font-size: 0.82rem;
+    cursor: pointer;
+    transition: var(--transition-smooth);
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.btn-clear-search:hover {
+    background: var(--primary-red);
+    border-color: var(--primary-red);
+}
+
+/* ==========================================================================
+   MODAIS PERSONALIZADOS (PLAYER DE VÍDEO E MAIS INFORMAÇÕES)
+   ========================================================================== */
+.custom-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 2000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    opacity: 0;
+    visibility: hidden; /* Oculto por padrão até receber a classe .open */
+    transition: opacity 0.28s ease, visibility 0.28s ease;
+}
+
+/* Estado aberto do modal */
+.custom-modal.open {
+    opacity: 1;
+    visibility: visible;
+}
+
+/* Fundo escuro com desfoque atrás do modal */
+.custom-modal-backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.85);
+    backdrop-filter: blur(6px);
+}
+
+/* Caixa central do modal */
+.custom-modal-content {
+    position: relative;
+    z-index: 2;
+    background: var(--bg-elevated);
+    border: 1px solid var(--border-subtle);
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.9);
+    width: 100%;
+    transform: scale(0.95);
+    transition: transform 0.28s ease;
+}
+
+.custom-modal.open .custom-modal-content {
+    transform: scale(1);
+}
+
+.player-box {
+    max-width: 920px;
+}
+
+.custom-modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 20px;
+    background: #101017;
+    border-bottom: 1px solid var(--border-subtle);
+}
+
+.custom-modal-header h4 {
+    margin: 0;
+    font-size: 1rem;
+    font-weight: 600;
+}
+
+.btn-close-modal {
+    background: rgba(255, 255, 255, 0.1);
+    border: none;
+    color: #fff;
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: var(--transition-smooth);
+}
+
+.btn-close-modal:hover {
+    background: var(--primary-red);
+}
+
+.floating-close {
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    z-index: 10;
+}
+
+/* Container de vídeo mantendo proporção widescreen 16:9 */
+.video-container {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    background: #000;
+}
+
+.video-container iframe {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    border: none;
+}
+
+/* Layout interno do Modal de Informações */
+.info-box {
+    max-width: 720px;
+}
+
+.info-body {
+    display: flex;
+    gap: 24px;
+    padding: 28px;
+}
+
+.info-poster {
+    width: 210px;
+    aspect-ratio: 2 / 3;
+    object-fit: cover;
+    border-radius: 8px;
+    flex-shrink: 0;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
+}
+
+.info-details {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.info-tag {
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--primary-red);
+    font-weight: 700;
+    margin-bottom: 4px;
+}
+
+.info-details h3 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2.4rem;
+    margin-bottom: 10px;
+    letter-spacing: 1px;
+}
+
+.info-meta {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 12px;
+    font-size: 0.88rem;
+}
+
+/* Tags clicáveis de categorias vindas do relacionamento SQLite dentro do modal */
+.info-category-badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 16px;
+}
+
+.info-cat-badge {
+    font-size: 0.75rem;
+    padding: 3px 10px;
+    border-radius: 12px;
+    background: rgba(229, 9, 20, 0.14);
+    border: 1px solid rgba(229, 9, 20, 0.35);
+    color: #ff8a90;
+    cursor: pointer;
+    transition: var(--transition-smooth);
+}
+
+.info-cat-badge:hover {
+    background: var(--primary-red);
+    color: #fff;
+}
+
+.info-details p {
+    color: var(--text-secondary);
+    font-size: 0.95rem;
+    line-height: 1.6;
+    margin-bottom: 22px;
+}
+
+/* ==========================================================================
+   RODAPÉ (FOOTER)
+   ========================================================================== */
+.footer {
+    border-top: 1px solid var(--border-subtle);
+    background-color: #07070a;
+    padding: 40px 4% 24px;
+    margin-top: 30px;
+}
+
+.footer-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 20px;
+    max-width: 1600px;
+    margin: 0 auto 24px;
+}
+
+.footer-brand h2 {
+    font-family: 'Bebas Neue', sans-serif;
+    color: var(--primary-red);
+    font-size: 1.8rem;
+    letter-spacing: 1.5px;
+    margin-bottom: 6px;
+}
+
+.footer-brand h2 span {
+    color: #fff;
+}
+
+.footer-brand p {
+    color: var(--text-muted);
+    font-size: 0.85rem;
+    margin: 0;
+}
+
+.footer-links {
+    display: flex;
+    gap: 20px;
+}
+
+.footer-links a {
+    color: var(--text-secondary);
+    text-decoration: none;
+    font-size: 0.88rem;
+    transition: var(--transition-smooth);
+}
+
+.footer-links a:hover {
+    color: var(--primary-red);
+}
+
+.footer-bottom {
+    text-align: center;
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+    padding-top: 18px;
+    color: var(--text-muted);
+    font-size: 0.8rem;
+}
+
+/* ==========================================================================
+   MEDIA QUERIES (RESPONSIVIDADE PARA TABLETS E CELULARES)
+   ========================================================================== */
+@media (max-width: 900px) {
+    .category-select-wrapper {
+        display: none; /* Em telas menores, usa a barra de categorias logo abaixo do banner */
+    }
+}
+
+@media (max-width: 768px) {
+    /* Esconde o menu horizontal e transforma em menu suspenso no mobile */
+    .options {
+        display: none;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        width: 100%;
+        background: rgba(14, 14, 20, 0.98);
+        flex-direction: column;
+        padding: 16px 0;
+        border-bottom: 1px solid var(--border-subtle);
+    }
+
+    /* Exibe o menu quando o botão hambúrguer é clicado */
+    .options.show {
+        display: flex;
+    }
+
+    .mobile-menu-btn {
+        display: inline-block;
+    }
+
+    .search-box input {
+        width: 150px;
+    }
+
+    .search-box input:focus {
+        width: 180px;
+    }
+
+    .wallpaper {
+        min-height: 70vh;
+        padding-top: 95px;
+    }
+
+    /* Empilha o pôster e o texto no modal de informações em telas pequenas */
+    .info-body {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+
+    .info-meta,
+    .info-category-badges {
+        justify-content: center;
+    }
+
+    .info-poster {
+        width: 160px;
+    }
 }
